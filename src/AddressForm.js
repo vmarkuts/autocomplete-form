@@ -44,11 +44,13 @@ function AddressForm() {
         value={address}
         onChange={setAddress}
         onSelect={handleSelect}
+        
+        //RESTRICTIONS for US and English
         searchOptions={{
-        types: ['(regions)'],
-        componentRestrictions: { country: 'us' },
-        language: 'en',
-  }}
+          types: ['(regions)'],
+          componentRestrictions: { country: 'us' },
+          language: 'en',
+        }}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
