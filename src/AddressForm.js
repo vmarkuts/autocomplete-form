@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 function AddressForm() {
   const [address, setAddress] = useState('');
@@ -11,62 +7,75 @@ function AddressForm() {
   const [city, setCity] = useState('');
   const [zip, setZip] = useState('');
 
-const handleSelect = async (selectedAddress) => {
-  try {
-    const results = await geocodeByAddress(selectedAddress);
-    const addressComponents = results[0].address_components;
+  const handleSelect = async (selectedAddress) => {
+    try {
+      const results = await geocodeByAddress(selectedAddress);
+      const addressComponents = results[0].address_components;
 
-    let newState = '';
-    let newCity = '';
-    let newZip = '';
+      let newState = '';
+      let newCity = '';
+      let newZip = '';
 
-    // Loop through address components to find the state, city, and zip
-    for (let i = 0; i < addressComponents.length; i++) {
-      const component = addressComponents[i];
-      const types = component.types;
+      for (let i = 0; i < addressComponents.length; i++) {
+        const component = addressComponents[i];
+        const types = component.types;
 
-      if (types.includes('administrative_area_level_1')) {
-        // This is the state
-        newState = component.long_name;
-      } else if (types.includes('locality')) {
-        // This is the city
-        newCity = component.long_name;
-      } else if (types.includes('postal_code')) {
-        // This is the zip code
-        newZip = component.long_name;
+        if (types.includes('administrative_area_level_1')) {
+          newState = component.long_name;
+        } else if (types.includes('locality')) {
+          newCity = component.long_name;
+        } else if (types.includes('postal_code')) {
+          newZip = component.long_name;
+        }
       }
+
+      setAddress(selectedAddress);
+      setState(newState);
+      setCity(newCity);
+      setZip(newZip);
+    } catch (error) {
+      console.error('Error selecting address:', error);
     }
-
-    setAddress(selectedAddress);
-    setState(newState);
-    setCity(newCity);
-    setZip(newZip);
-  } catch (error) {
-    console.error('Error selecting address:', error);
-  }
-};
-
+  };
 
   return (
     <div>
       <PlacesAutocomplete
-  value={address}
-  onChange={setAddress}
-  onSelect={handleSelect}
-  googleAPIKey="AIzaSyDuZaDdB8LpJDUn6yvty3PnCRJGOPauFKU" // Add your Google Autocomplete API key here
->
-  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-    <div>
-      <input
-        {...getInputProps({
-          placeholder: 'Enter your address...',
-        })}
-      />
-      {/* ... rest of the code ... */}
-    </div>
-  )}
-</PlacesAutocomplete>
-
+        value={address}
+        onChange={setAddress}
+        onSelect={handleSelect}
+        searchOptions={{
+        types: ['(regions)'],
+        componentRestrictions: { country: 'us' },
+        language: 'en',
+  }}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input
+              {...getInputProps({
+                placeholder: 'Enter your address...',
+              })}
+            />
+            <div>
+              {loading ? <div>Loading...</div> : null}
+              {suggestions.map((suggestion) => {
+                const style = {
+                  backgroundColor: suggestion.active ? '#41b6e6' : '#fff',
+                };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, { style })}
+                    key={suggestion.description}
+                  >
+                    {suggestion.description}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
 
       <div>
         <label>State:</label>
