@@ -1,0 +1,1 @@
+const t=document.createElement('textarea'),c=document.createElement('div');t.rows=4;t.cols=30;t.placeholder='Start typing...';t.oninput=()=>{c.textContent='Words: '+(t.value.trim().split(/\s+/).filter(x=>x).length||0);};document.body.append(t,c);
