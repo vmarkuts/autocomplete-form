@@ -1,0 +1,1 @@
+const r=document.createElement('div');r.style.position='fixed';r.style.bottom='10px';r.style.right='10px';r.style.background='#000';r.style.color='#fff';r.style.padding='4px 8px';document.body.appendChild(r);window.onresize=()=>{r.textContent=`${window.innerWidth}×${window.innerHeight}`;};window.dispatchEvent(new Event('resize'));
