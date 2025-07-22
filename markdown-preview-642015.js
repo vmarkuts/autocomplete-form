@@ -1,0 +1,1 @@
+const i=document.createElement('textarea'),o=document.createElement('div');i.rows=6;i.cols=40;i.placeholder='Write markdown...';i.oninput=()=>{o.innerHTML=i.value.replace(/^### (.*$)/gim,'<h3>$1</h3>').replace(/^## (.*$)/gim,'<h2>$1</h2>').replace(/^# (.*$)/gim,'<h1>$1</h1>').replace(/\*\*(.*)\*\*/gim,'<b>$1</b>').replace(/\*(.*)\*/gim,'<i>$1</i>');};document.body.append(i,o);
